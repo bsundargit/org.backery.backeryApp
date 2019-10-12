@@ -2,6 +2,8 @@ package mainApp;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
@@ -25,6 +27,7 @@ import org.backery.entity.BackeryException;
 import org.backery.entity.Item;
 import org.backery.entity.Pack;
 import org.backery.utils.ReadDataFromPropertiesFile;
+import org.backery.utils.WriteDataFromGuiToPropertiesFile;
 
 public class MainApp {
 
@@ -43,7 +46,7 @@ public class MainApp {
 	private static javax.swing.JTextField itemNameTextBoxAI;
 	private static javax.swing.JLabel itemNameValue;
 	private static javax.swing.JComboBox<String> itemsComboBox;
-	private static javax.swing.JButton jButton3;
+	private static javax.swing.JButton addButton;
 	private static javax.swing.JLabel jLabel1;
 	private static javax.swing.JLabel jLabel10;
 	private static javax.swing.JLabel jLabel11;
@@ -115,8 +118,10 @@ public class MainApp {
 
 	private static void initComponents() {
 
-		ReadDataFromPropertiesFile readData = new ReadDataFromPropertiesFile();
+		final ReadDataFromPropertiesFile readData = new ReadDataFromPropertiesFile();
 		Map<String, String> data = readData.getPropertiesFileData();
+		final StringBuilder inventoryData = new StringBuilder();
+
 		BackeryLogger.log(Level.INFO, " Getting initialized ...");
 		if (data.isEmpty()) {
 			BackeryLogger.log(Level.ERROR,
@@ -137,11 +142,11 @@ public class MainApp {
 		viewItemsTab = new javax.swing.JTabbedPane();
 		orderPanel = new javax.swing.JPanel();
 		itemName = new javax.swing.JLabel();
-		itemsComboBox = new javax.swing.JComboBox<>();
+		itemsComboBox = new javax.swing.JComboBox();
 		itemCode = new javax.swing.JLabel();
 		itemNameValue = new javax.swing.JLabel();
 		quantityLabel = new javax.swing.JLabel();
-		quantityComboBox = new javax.swing.JComboBox<>();
+		quantityComboBox = new javax.swing.JComboBox();
 		processButton = new javax.swing.JButton();
 		remarksLabel = new javax.swing.JLabel();
 		jScrollPane1 = new javax.swing.JScrollPane();
@@ -165,7 +170,7 @@ public class MainApp {
 		jTextField6 = new javax.swing.JTextField();
 		jTextField7 = new javax.swing.JTextField();
 		jTextField8 = new javax.swing.JTextField();
-		jButton3 = new javax.swing.JButton();
+		addButton = new javax.swing.JButton();
 		viewInventoryPanel = new javax.swing.JPanel();
 		viewInventoryButton = new javax.swing.JButton();
 		jScrollPane2 = new javax.swing.JScrollPane();
@@ -237,7 +242,6 @@ public class MainApp {
 		orderPanel.add(itemsComboBox);
 		itemsComboBox.setBounds(150, 40, 180, 26);
 		itemsComboBox.addItemListener(new ItemListener() {
-			@Override
 			public void itemStateChanged(ItemEvent e) {
 
 				JComboBox cb = (JComboBox) e.getSource();
@@ -261,7 +265,7 @@ public class MainApp {
 		orderPanel.add(quantityLabel);
 		quantityLabel.setBounds(40, 120, 60, 20);
 
-		quantityComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(
+		quantityComboBox.setModel(new javax.swing.DefaultComboBoxModel(
 				new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15" }));
 		orderPanel.add(quantityComboBox);
 		quantityComboBox.setBounds(150, 116, 180, 26);
@@ -312,13 +316,13 @@ public class MainApp {
 
 		itemCodeLabelAI.setText("Itemcode");
 
-		itemCodeTextBoxAI.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				// itemCodeTextBoxAIActionPerformed(evt);
-			}
-		});
+		/*
+		 * itemCodeTextBoxAI.addActionListener(new java.awt.event.ActionListener() {
+		 * public void actionPerformed(java.awt.event.ActionEvent evt) { //
+		 * itemCodeTextBoxAIActionPerformed(evt); } });
+		 */
 
-		packsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Pack"));
+		packsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Pack - Size (Integer) and Amount (Float)"));
 
 		jLabel10.setText("Pack size");
 
@@ -393,7 +397,68 @@ public class MainApp {
 										javax.swing.GroupLayout.PREFERRED_SIZE))
 						.addContainerGap(33, Short.MAX_VALUE)));
 
-		jButton3.setText("Add");
+		addButton.setText("Add");
+		addButton.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				StringBuilder dataToAddInPropertiesFile = new StringBuilder();
+				String itemCode = itemCodeTextBoxAI.getText();
+				String itemName = itemNameTextBoxAI.getText();
+
+				String packSize1Quantity = jTextField3.getText();
+				String packSize1Cost = jTextField4.getText();
+
+				if (itemCode.isEmpty() || itemName.isEmpty() || packSize1Quantity.isEmpty()
+						|| packSize1Cost.isEmpty()) {
+					JOptionPane.showMessageDialog(addButton, "ItemCode, ItemName and one set of pack is mandatory",
+							"Insufficient Details", JOptionPane.INFORMATION_MESSAGE);
+				}
+
+				else if (checkSizeAndCostOfPack(packSize1Quantity, packSize1Cost)) {
+					dataToAddInPropertiesFile.append("itemcode=" + itemCode);
+					dataToAddInPropertiesFile.append(System.lineSeparator());
+					dataToAddInPropertiesFile.append("itemname=" + itemName);
+					dataToAddInPropertiesFile.append(System.lineSeparator());
+
+					// convert amount to float and write it to file.
+					dataToAddInPropertiesFile.append(
+							"pack=" + packSize1Quantity + "-" + String.valueOf(Float.parseFloat(packSize1Cost)));
+					// dataToAddInPropertiesFile.append(System.lineSeparator());
+					WriteDataFromGuiToPropertiesFile obj = new WriteDataFromGuiToPropertiesFile(
+							dataToAddInPropertiesFile);
+					obj.writeDataToPropertiesFile();
+					JOptionPane.showMessageDialog(addButton, "Details Added Successfully");
+				} else {
+					JOptionPane.showMessageDialog(addButton, "Either Quantity or Price of the Quantity in Invalid");
+				}
+
+				jTextField3.setText("");
+				jTextField4.setText("");
+
+			}
+
+			/**
+			 * To check whether the given input(quantity and price) from the gui correct or
+			 * not.
+			 * 
+			 * @param packSize1Quantity
+			 * @param packSize1Cost
+			 * @return
+			 */
+			private boolean checkSizeAndCostOfPack(String packSize1Quantity, String packSize1Cost) {
+
+				try {
+					Integer.parseInt(packSize1Quantity);
+					Float.parseFloat(packSize1Cost);
+					return true;
+				} catch (NumberFormatException e) {
+					BackeryLogger.log(Level.ERROR, "Quantity should be of Integer and Price should be of Float");
+					BackeryLogger.log(Level.ERROR, "Either Quantity - " + packSize1Quantity + " or Cost - "
+							+ packSize1Cost + " of the Item is invalid");
+				}
+				return false;
+			}
+		});
 
 		javax.swing.GroupLayout addItemPanelLayout = new javax.swing.GroupLayout(addItemPanel);
 		addItemPanel.setLayout(addItemPanelLayout);
@@ -404,7 +469,7 @@ public class MainApp {
 						.addGroup(addItemPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 								.addGroup(addItemPanelLayout
 										.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-										.addComponent(jButton3).addComponent(packsPanel,
+										.addComponent(addButton).addComponent(packsPanel,
 												javax.swing.GroupLayout.PREFERRED_SIZE,
 												javax.swing.GroupLayout.DEFAULT_SIZE,
 												javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -434,15 +499,29 @@ public class MainApp {
 						.addGap(25, 25, 25)
 						.addComponent(packsPanel, javax.swing.GroupLayout.DEFAULT_SIZE,
 								javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(jButton3)
+						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(addButton)
 						.addGap(43, 43, 43)));
 
 		viewItemsTab.addTab("Add Item", addItemPanel);
 
 		viewInventoryButton.setText("View Inventory");
+		viewInventoryButton.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				inventoryData.setLength(0);
+				Map<String, String> propertiesFiledData = readData.getPropertiesFileData();
+				for (Map.Entry<String, String> mapData : propertiesFiledData.entrySet()) {
+					inventoryData.append(mapData.getValue().toString());
+					inventoryData.append(System.lineSeparator());
+					inventoryData.append(System.lineSeparator());
+				}
+				inventoryTextArea.setText(inventoryData.toString());
+			}
+		});
 
 		inventoryTextArea.setColumns(20);
 		inventoryTextArea.setRows(5);
+		// inventoryTextArea.setText(inventoryData.toString());
 		jScrollPane2.setViewportView(inventoryTextArea);
 
 		javax.swing.GroupLayout viewInventoryPanelLayout = new javax.swing.GroupLayout(viewInventoryPanel);
@@ -482,6 +561,12 @@ public class MainApp {
 
 		mainFrame.pack();
 
+		// For now, lets limit to only one set of pack to be added at a time.
+		jTextField5.setEditable(false);
+		jTextField6.setEditable(false);
+		jTextField7.setEditable(false);
+		jTextField8.setEditable(false);
+
 		// Center the GUI in the Screen.
 		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
 		int x = (int) ((dimension.getWidth() - mainFrame.getWidth()) / 2);
@@ -503,6 +588,7 @@ public class MainApp {
 		Map<String, String> returnMap = new HashMap();
 		for (Map.Entry<String, String> mapVar : aInDataMap.entrySet()) {
 			String value = mapVar.getValue();
+			// Example Data
 			// itemcode=CF
 			// itemname=Croissant
 			// pack=3-5.95,5-9.95,9-16.99
@@ -539,7 +625,7 @@ public class MainApp {
 				ratePerPack.put(p.getNumberOfItemsPerPack(), p.getPackAmount());
 			}
 
-			// Sort it so it can be reversed in descending order
+			// Sort it, so it can be reversed in descending order
 			Collections.sort(entryItems);
 
 			// reverse it.

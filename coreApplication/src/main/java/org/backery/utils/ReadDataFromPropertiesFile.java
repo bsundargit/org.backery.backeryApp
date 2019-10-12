@@ -28,7 +28,9 @@ public class ReadDataFromPropertiesFile {
 	Map<String, String> fileData = new HashMap();
 
 	public Map<String, String> getPropertiesFileData() {
-		try (FileReader reader = new FileReader(FILEURL); BufferedReader br = new BufferedReader(reader)) {
+		try {
+			FileReader reader = new FileReader(FILEURL);
+				BufferedReader br = new BufferedReader(reader);
 			// read line by line
 			String line;
 

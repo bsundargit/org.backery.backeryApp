@@ -6,6 +6,10 @@
 	<artifactId>coreApplication</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -25,4 +29,107 @@
 			<version>1.2.17</version>
 		</dependency>
 	</dependencies>
+	<!-- <build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<fork>false</fork>
+					<executable>${JAVA_HOME}/bin/javac</executable>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.18.1</version>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>idlj-maven-plugin</artifactId>
+				<version>1.2.1</version>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>rpm-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>rpm</goal>
+						</goals>
+						<configuration>
+							<needarch>noarch</needarch>
+							<targetOS>linux</targetOS>
+							<version>${rpmVersion}</version>
+							<group>BakeryApplication</group>
+							<copyright>Bhaskar</copyright>
+							<defaultDirmode>755</defaultDirmode>
+							<defaultFilemode>444</defaultFilemode>
+							<defaultGroupname>bakapp</defaultGroupname>
+							<defaultUsername>bakapp</defaultUsername>
+							<mappings>
+								<mapping>
+									<directory>/opt/bak-app</directory>
+								</mapping>
+								<mapping>
+									<directory>/opt/bak-app/lib</directory>
+								</mapping>
+								<mapping>
+									<directory>/opt/bak-app/logs</directory>
+								</mapping>
+								<mapping>
+									<directory>/opt/bak-app/resources</directory>
+								</mapping>
+								<mapping>
+									<directory>/opt/bak-app/lib</directory>
+									<sources>
+										<source>
+											<location>${basedir}/target/ALX-DYNAMIC-SNAPSHOT.jar</location>
+										</source>
+									</sources>
+								</mapping>
+								<mapping>
+									<directory>/opt/bak-app/lib</directory>
+									<sources>
+										<source>
+											<location>${basedir}/lib</location>
+											<includes>
+												<include>*.jar</include>
+											</includes>
+										</source>
+									</sources>
+								</mapping>
+								<mapping>
+									<directory>/opt/bak-app/resources</directory>
+									<filemode>755</filemode>
+									<sources>
+										<source>
+											<location>${basedir}/resources</location>
+										</source>
+									</sources>
+								</mapping>
+								<mapping>
+									<directory>/opt/bak-app/bin</directory>
+									<filemode>555</filemode>
+									<sources>
+										<source>
+											<location>${basedir}/bin</location>
+											<excludes>
+												<exclude>bak-app_install.sh</exclude>
+											</excludes>
+										</source>
+									</sources>
+								</mapping>
+							</mappings>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build> -->
 </project>
