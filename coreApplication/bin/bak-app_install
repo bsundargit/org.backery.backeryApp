@@ -1,9 +1,9 @@
 #!/bin/bash
 #-------------------------------------------------------------------------------
-# This script will install or upgrade the BAK-APP Application
+# This script will install the BAK-APP Application
 #-------------------------------------------------------------------------------
 
-BAK-APP_RPM_NAME=ALX-1-1.noarch.rpm
+BAK-APP_RPM_NAME=
 ALX_RPM_MD5SUM=3664b7bd3853efe1d53100d43ce63b53
 
 JRE_NAME=jre-8u121-linux-x64.tar.gz
@@ -69,26 +69,6 @@ check_and_install_java()
     fi
 }
 
-update_bash_profile()
-{
-    echo -e "\n11. Updating the ALX user bash profile"
-    grep "JAVA_HOME" /home/bak-app/.bash_profile 1>/dev/null
-    ispresent=$?
-    if [ ".$ispresent." = ".1." ] ; then
-        su bak-app <<EOF6
-echo "JAVA_HOME=/usr/lib/jvm/jre1.8.0_121"              >> /home/bak-app/.bash_profile
-echo "export JAVA_HOME"                                 >> /home/bak-app/.bash_profile
-echo "PATH=/usr/lib/jvm/jre1.8.0_121/bin:/opt/oss/NSN-bak-app/bin:/usr/lib64/qt-3.3/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/home/bak-app/bin" >> /home/bak-app/.bash_profile
-echo "export PATH"                                      >> /home/bak-app/.bash_profile
-echo "export LD_LIBRARY_PATH=/usr/local/bin"            >> /home/bak-app/.bash_profile
-exit
-EOF6
-        echo "    Updated the /home/bak-app/.bash_profile"
-    else
-        echo "    /home/bak-app/.bash_profile is already updated"
-    fi
-}
-
 check_java_version()
 {
     echo "    Checking for java version 1.8.0_121"
@@ -111,25 +91,6 @@ check_java_version()
     fi
 }
 
-check_and_update_rc_local_file()
-{
-    echo -e "\n12. Updating /etc/rc.d/rc.local file for bak-app_service start command"
-    grep "bak-app_service start" /etc/rc.d/rc.local 1>/dev/null
-    rclocal=$?
-    if [ ".$rclocal." = ".1." ] ; then
-        echo "/opt/oss/NSN-bak-app/bin/bak-app_service start" >> /etc/rc.d/rc.local
-        echo "    Updated the /etc/rc.d/rc.local file for bak-app_service start command"
-    else
-        echo "    /etc/rc.d/rc.local file is already updated for bak-app_service start command"
-    fi
-}
-
-upgrade_bak-app_package()
-{
-    echo -e "\n13. Installing ALX application package"
-    rpm -Uvh /var/tmp/setup/$BAK-APP_RPM_NAME
-}
-
 continue_process()
 {
     while true; do
@@ -146,21 +107,10 @@ main()
 {
     echo -e "\nThis script will install or upgrade the BAK-APP application\n"
     continue_process
-
     check_linux_version
-    check_cpu_count
-    check_ram_memory
-    check_disk_storage_capacity
     verify_checksum_packages
-    check_netsnmp_install
     check_and_create_bak-app_user
     check_and_install_java
-    install_nbisnmptrapd
-    add_firewall_entries
-    update_bash_profile
-    check_and_update_rc_local_file    
-    upgrade_bak-app_package
-    add_cron_trapreceiver
     echo -e "\nInstallation/Upgrade of the BAK-APP application is fully completed.\n"
 }
 

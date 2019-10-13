@@ -64,8 +64,8 @@ public class ReadDataFromPropertiesFile {
 			BackeryLogger.log(Level.ERROR, "Properties file not found " + e.getMessage());
 			BackeryLogger.log(Level.ERROR, "Ensure the properties file exist and relaunch the application " + e.getMessage());
 			System.exit(0);
-		} catch (IOException e1) {
-			BackeryLogger.log(Level.ERROR, "IO Exception occured " + e1.getMessage());
+		} catch (IOException e) {
+			BackeryLogger.log(Level.ERROR, "IO Exception occured " + e.getMessage());
 		} 
 		return fileData;
 	}

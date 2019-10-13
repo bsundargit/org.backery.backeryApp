@@ -29,10 +29,10 @@ import org.backery.utils.WriteDataFromGuiToPropertiesFile;
 
 /**
  * Main Class for the Application.
- * 
+ *  
  * This class contains the code for UI components made out of swing. Also the
  * action/events which are associated with the components.
- * 
+ *  
  * 
  * @author esxxbhs
  *
@@ -106,11 +106,11 @@ public class MainApp {
 			} else {
 				BackeryLogger.log(Level.INFO, "Launching Command Line Mode");
 				receivedList = ds.getAllData();
-				String output = new BackeryUtils().processIt(receivedList, args[0], Integer.parseInt(args[1]), data);
+				String output = new BackeryUtils().processInput(receivedList, args[0], Integer.parseInt(args[1]), data);
 				BackeryLogger.log(Level.INFO, "Packing Information " + output);
 			}
 		} catch (BackeryException e) {
-			BackeryLogger.log(Level.ERROR, "Unable to initialize Bakery Application");
+			BackeryLogger.log(Level.ERROR, "Unable to initialize Bakery Application " + e.getMessage());
 		}
 	}
 
@@ -189,7 +189,7 @@ public class MainApp {
 		jLabel1.setText("Backery logo");
 		jLabel2.setText("Username");
 		jLabel6.setText("Last Login Time");
-		jLabel17.setText("Tom");
+		jLabel17.setText("Tom"); 
 		jLabel18.setText("09.30 06-10-2019");
 
 		javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -263,7 +263,7 @@ public class MainApp {
 		quantityLabel.setBounds(40, 120, 60, 20);
 
 		quantityComboBox.setModel(new javax.swing.DefaultComboBoxModel(
-				new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15" }));
+				new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
 		orderPanel.add(quantityComboBox);
 		quantityComboBox.setBounds(150, 116, 180, 26);
 
@@ -276,7 +276,7 @@ public class MainApp {
 						JOptionPane.showMessageDialog(itemNameValue, "Itemname is empty, Select any Itemcode");
 					} else {
 						receivedList = ds.getAllData();
-						output = new BackeryUtils().processIt(receivedList, itemsComboBox.getSelectedItem().toString(),
+						output = new BackeryUtils().processInput(receivedList, itemsComboBox.getSelectedItem().toString(),
 								Integer.parseInt(quantityComboBox.getSelectedItem().toString()), MainApp.data);
 						BackeryLogger.log(Level.DEBUG,
 								"Selected Item Code - " + itemsComboBox.getSelectedItem().toString());
@@ -285,8 +285,8 @@ public class MainApp {
 
 						outputTrextArea.setText(output);
 					}
-				} catch (BackeryException e1) {
-					BackeryLogger.log(Level.ERROR, "Unable to find the pack match");
+				} catch (BackeryException e) {
+					BackeryLogger.log(Level.ERROR, "Unable to find the pack match " + e.getMessage());
 				}
 			}
 		});
@@ -417,7 +417,9 @@ public class MainApp {
 				} else {
 					JOptionPane.showMessageDialog(addButton, "Either Quantity or Price of the Quantity in Invalid");
 				}
-
+				
+				itemCodeTextBoxAI.setText("");
+				itemNameTextBoxAI.setText("");
 				packQuantityTextBox.setText("");
 				packAmountTextBox.setText("");
 

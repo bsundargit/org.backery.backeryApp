@@ -8,7 +8,12 @@ public class TestPack {
 	Pack newPack = new Pack();
 	
 	@Test(expected = BackeryException.class)
-	public void setNumberOfItemsPerPack() throws BackeryException {
+	public void testSetNumberOfItemsPerPack() throws BackeryException {
 		newPack.setNumberOfItemsPerPack(0);
+	}
+	
+	@Test(expected = BackeryException.class)
+	public void testSetAmountPerPack() throws BackeryException {
+		newPack.setPackAmount(0);
 	}
 }

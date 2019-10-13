@@ -47,7 +47,7 @@ public class BackeryUtils implements IBackeryUtils {
 	 * @param input
 	 * @param data
 	 */
-	public String processIt(Map<String, Item> receivedList, String inputItem, int input, Map<Integer, Integer> data) {
+	public String processInput(Map<String, Item> receivedList, String inputItem, int input, Map<Integer, Integer> data) {
 
 		BackeryLogger.log(Level.INFO, "Finding the packaging structure for the selected itemcode " + inputItem
 				+ " with the quantity " + input);

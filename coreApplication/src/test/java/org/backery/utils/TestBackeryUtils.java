@@ -101,7 +101,7 @@ public class TestBackeryUtils {
 
 			Map<Integer, Integer> dataMap = new HashMap();
 
-			String output = utils.processIt(daoData, "Vegemite Scroll", 13, dataMap);
+			String output = utils.processInput(daoData, "Vegemite Scroll", 13, dataMap);
 
 			String expectedOutput = "5 * 2\r\n" + "3 * 1\r\n" + "\r\n" + "Total Amount $24.97";
 
@@ -138,7 +138,7 @@ public class TestBackeryUtils {
 
 			Map<Integer, Integer> dataMap = new HashMap();
 
-			String output = utils.processIt(daoData, "Vegemite Scroll", 2, dataMap);
+			String output = utils.processInput(daoData, "Vegemite Scroll", 2, dataMap);
 
 			String expectedOutput = "No matching Combinations for the item selected.";
 

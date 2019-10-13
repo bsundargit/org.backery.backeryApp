@@ -18,8 +18,8 @@ public class WriteDataFromGuiToPropertiesFile {
 
 	StringBuilder strBuilder;
 
-	public WriteDataFromGuiToPropertiesFile(StringBuilder local) {
-		this.strBuilder = local;
+	public WriteDataFromGuiToPropertiesFile(StringBuilder aInStrBuilder) {
+		this.strBuilder = aInStrBuilder;
 	}
 
 	public void writeDataToPropertiesFile() {
@@ -30,7 +30,7 @@ public class WriteDataFromGuiToPropertiesFile {
 			writer.write(strBuilder.toString());
 			writer.close();
 		} catch (IOException e) {
-			BackeryLogger.log(Level.ERROR, "Unable to write contents to the properties file");
+			BackeryLogger.log(Level.ERROR, "Unable to write contents to the properties file " + e.getMessage());
 		}
 	}
 }
