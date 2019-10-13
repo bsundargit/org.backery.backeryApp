@@ -1,10 +1,17 @@
 package org.backery.entity;
 
+import org.backery.common.BackeryException;
+
+/**
+ * Pack Class which contains the Pack Quantity/Size and its amount.
+ * 
+ * @author esxxbhs
+ *
+ */
 public class Pack {
 
 	int numberOfItemsPerPack;
 	float packAmount;
-	float individualItemPrice = 0.0f;
 
 	public int getNumberOfItemsPerPack() {
 		return numberOfItemsPerPack;
@@ -25,13 +32,4 @@ public class Pack {
 			throw new BackeryException("Amount cannot be zero ");
 		this.packAmount = packAmount;
 	}
-
-	public float getIndividualItemPrice() {
-		return individualItemPrice;
-	}
-
-	public void setIndividualItemPrice(float individualItemPrice) {
-		this.individualItemPrice = individualItemPrice;
-	}	
-	
 }

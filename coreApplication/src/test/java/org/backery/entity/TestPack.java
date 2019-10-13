@@ -1,5 +1,6 @@
 package org.backery.entity;
 
+import org.backery.common.BackeryException;
 import org.junit.Test;
 
 public class TestPack {

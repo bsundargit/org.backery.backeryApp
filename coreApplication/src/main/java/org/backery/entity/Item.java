@@ -2,6 +2,13 @@ package org.backery.entity;
 
 import java.util.List;
 
+import org.backery.common.BackeryException;
+
+/**
+ * Item class POJO
+ * @author esxxbhs
+ *
+ */
 public class Item {
 
 	public String itemName;
@@ -27,7 +34,9 @@ public class Item {
 	public List<Pack> getPacks() {
 		return packs;
 	}
-	public void setPacks(List<Pack> packs) {
+	public void setPacks(List<Pack> packs) throws BackeryException {
+		if(packs.size()==0)
+			throw new BackeryException("Pack must contain atleast one set of Quantity and Amount");
 		this.packs = packs;
 	}
 }

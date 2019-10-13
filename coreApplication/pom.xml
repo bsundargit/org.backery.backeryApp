@@ -12,22 +12,36 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.12</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-all</artifactId>
-			<version>1.9.5</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>1.2.17</version>
 		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>2.0.5-beta</version>
+		</dependency>
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-api-mockito</artifactId>
+			<version>1.6.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-module-junit4</artifactId>
+			<version>1.6.2</version>
+			<scope>test</scope>
+		</dependency>
+
+
 	</dependencies>
 	<!-- <build>
 		<plugins>
@@ -64,7 +78,7 @@
 						</goals>
 						<configuration>
 							<needarch>noarch</needarch>
-							<targetOS>linux</targetOS>
+							<targetOS>windows</targetOS>
 							<version>${rpmVersion}</version>
 							<group>BakeryApplication</group>
 							<copyright>Bhaskar</copyright>
@@ -84,14 +98,6 @@
 								</mapping>
 								<mapping>
 									<directory>/opt/bak-app/resources</directory>
-								</mapping>
-								<mapping>
-									<directory>/opt/bak-app/lib</directory>
-									<sources>
-										<source>
-											<location>${basedir}/target/ALX-DYNAMIC-SNAPSHOT.jar</location>
-										</source>
-									</sources>
 								</mapping>
 								<mapping>
 									<directory>/opt/bak-app/lib</directory>

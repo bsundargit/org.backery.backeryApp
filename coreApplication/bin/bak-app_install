@@ -1,0 +1,170 @@
+#!/bin/bash
+#-------------------------------------------------------------------------------
+# This script will install or upgrade the BAK-APP Application
+#-------------------------------------------------------------------------------
+
+BAK-APP_RPM_NAME=ALX-1-1.noarch.rpm
+ALX_RPM_MD5SUM=3664b7bd3853efe1d53100d43ce63b53
+
+JRE_NAME=jre-8u121-linux-x64.tar.gz
+JRE_MD5SUM=093e22e4f0a55420780a0e437ab9fcd4
+
+check_linux_version()
+{
+    echo -e "\n1. Checking for Red Hat Enterprise Linux Server release 6.7 (Santiago)"
+    linuxver=`cat /etc/redhat-release` 
+    if [ ".$linuxver." == ".Red Hat Enterprise Linux Server release 6.7 (Santiago)." ] ; then
+        echo "   Confirmed Red Hat Enterprise Linux Server release 6.7 (Santiago)"
+    else
+        echo "   Found only $linuxver."
+        continue_process
+    fi
+}
+
+check_checksum()
+{
+    pkgname="$1"
+    expcmd5="$2"
+    calcmd5=`md5sum $pkgname | awk '{print $1}'`
+    if [ ".$calcmd5." = ".$expcmd5." ] ; then
+        echo "   Confirmed checksum of $pkgname"
+    else
+        echo "   Checksum verification failed on $pkgname"
+        exit 1
+    fi
+}
+
+verify_checksum_packages()
+{
+    echo -e "\n5. Verifying the checksum of the installation packages"
+    check_checksum "/var/tmp/setup/$JRE_NAME"		"$JRE_MD5SUM"
+    check_checksum "/var/tmp/setup/$BAK-APP_RPM_NAME"	"$ALX_RPM_MD5SUM"
+}
+
+
+check_and_create_bak-app_user()
+{
+    echo -e "\n7. Checking and creating user account bak-app"
+    bak-appfound=`cat /etc/passwd | grep "^bak-app" | cut -f1 -d ":"`
+    if [ ".$bak-appfound." = ".bak-app." ] ; then
+        echo -e "   Confirmed user name '$bak-appfound' found.\n"
+        return 0
+    fi
+    rm -rf /home/bak-app
+    useradd -m -d /home/bak-app -s /bin/bash bak-app
+    passwd bak-app
+}
+
+check_and_install_java()
+{
+    echo -e "\n8. Check and install JRE installation package."
+    check_java_version
+    javainst=$?
+    if [ ".$javainst." = ".1." ] ; then
+        mkdir -p /usr/lib/jvm/
+        cd /usr/lib/jvm/
+        tar -zxvf /var/tmp/setup/jre-8u121-linux-x64.tar.gz
+    else
+        echo "   Required java version 1.8.0_121 already installed"
+    fi
+}
+
+update_bash_profile()
+{
+    echo -e "\n11. Updating the ALX user bash profile"
+    grep "JAVA_HOME" /home/bak-app/.bash_profile 1>/dev/null
+    ispresent=$?
+    if [ ".$ispresent." = ".1." ] ; then
+        su bak-app <<EOF6
+echo "JAVA_HOME=/usr/lib/jvm/jre1.8.0_121"              >> /home/bak-app/.bash_profile
+echo "export JAVA_HOME"                                 >> /home/bak-app/.bash_profile
+echo "PATH=/usr/lib/jvm/jre1.8.0_121/bin:/opt/oss/NSN-bak-app/bin:/usr/lib64/qt-3.3/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/home/bak-app/bin" >> /home/bak-app/.bash_profile
+echo "export PATH"                                      >> /home/bak-app/.bash_profile
+echo "export LD_LIBRARY_PATH=/usr/local/bin"            >> /home/bak-app/.bash_profile
+exit
+EOF6
+        echo "    Updated the /home/bak-app/.bash_profile"
+    else
+        echo "    /home/bak-app/.bash_profile is already updated"
+    fi
+}
+
+check_java_version()
+{
+    echo "    Checking for java version 1.8.0_121"
+    JAVA_HOME=/usr/lib/jvm/jre1.8.0_121
+    export JAVA_HOME
+    PATH=$JAVA_HOME/bin:$PATH
+    export PATH
+    javaver=`java -version 2>&1 | grep  "java version" | awk '{print $3}'|cut -f2 -d '"'`
+    if [ ".$javaver." == ".1.8.0_121." ] ; then
+        echo -e "    Confirmed java version $javaver\n"
+        return 0
+    else
+        if [ ".$javaver." == ".." ] ; then
+            echo "    Could not find any java installed. Need to install JRE 1.8.0_121"
+        else
+            echo "    Found only $javaver. Need to install JRE 1.8.0_121"
+        fi
+        continue_process
+        return 1
+    fi
+}
+
+check_and_update_rc_local_file()
+{
+    echo -e "\n12. Updating /etc/rc.d/rc.local file for bak-app_service start command"
+    grep "bak-app_service start" /etc/rc.d/rc.local 1>/dev/null
+    rclocal=$?
+    if [ ".$rclocal." = ".1." ] ; then
+        echo "/opt/oss/NSN-bak-app/bin/bak-app_service start" >> /etc/rc.d/rc.local
+        echo "    Updated the /etc/rc.d/rc.local file for bak-app_service start command"
+    else
+        echo "    /etc/rc.d/rc.local file is already updated for bak-app_service start command"
+    fi
+}
+
+upgrade_bak-app_package()
+{
+    echo -e "\n13. Installing ALX application package"
+    rpm -Uvh /var/tmp/setup/$BAK-APP_RPM_NAME
+}
+
+continue_process()
+{
+    while true; do
+        read -p "Do you want to proceed? " yn
+        case $yn in
+            [Yy]* ) break;;
+            [Nn]* ) exit;;
+                * ) echo "Please answer yes or no.";;
+        esac
+    done
+}
+
+main()
+{
+    echo -e "\nThis script will install or upgrade the BAK-APP application\n"
+    continue_process
+
+    check_linux_version
+    check_cpu_count
+    check_ram_memory
+    check_disk_storage_capacity
+    verify_checksum_packages
+    check_netsnmp_install
+    check_and_create_bak-app_user
+    check_and_install_java
+    install_nbisnmptrapd
+    add_firewall_entries
+    update_bash_profile
+    check_and_update_rc_local_file    
+    upgrade_bak-app_package
+    add_cron_trapreceiver
+    echo -e "\nInstallation/Upgrade of the BAK-APP application is fully completed.\n"
+}
+
+main
+exit 0
+
+

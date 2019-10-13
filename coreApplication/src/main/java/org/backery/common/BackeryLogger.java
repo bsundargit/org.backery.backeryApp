@@ -3,6 +3,13 @@ package org.backery.common;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+/**
+ * This file makes use of log4j to write the logs as per its defined level
+ * (DEBUG,ERROR etc)
+ * 
+ * @author esxxbhs
+ *
+ */
 public class BackeryLogger {
 	private static Logger logger = Logger.getLogger(BackeryLogger.class);
 	public static final BackeryLogger backeryLogger = new BackeryLogger();

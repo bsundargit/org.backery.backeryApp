@@ -1,0 +1,119 @@
+#!/bin/bash
+### BEGIN INIT INFO
+# Provides:          bak-app_service
+# Description:       To provide start, stop, restart and status interfaces for the Alarm Exporter Solution
+### END INIT INFO
+ 
+BAK-APP_USER=alx
+JAVA_HOME=/usr/lib/jvm/jre1.8.0_121
+BAK-APP_HOME=/opt/oss/NSN-alx
+PROGRAM="com.nokia.oss.alx.main.AlxMain"
+BAK-APP_EXECUTABLE="$JAVA_HOME/bin/java -cp $BAK-APP_HOME/lib/*:. $PROGRAM &"
+pidFile="/var/run/alx.pid"
+
+scriptFile=$(readlink -fn $(type -p $0))
+serviceName="bak-app_service"
+serviceNameLo="bak-app_service"
+rcFileBaseName="rc$serviceNameLo"
+rcFileName="/usr/local/sbin/$rcFileBaseName"
+etcInitDFile="/etc/init.d/$serviceNameLo"
+
+function getPid()
+{
+    echo $(ps -ef|grep com.nokia.oss.alx.main.AlxMain|grep -v grep|awk  '{print $2}'|head -1)
+}
+
+quiet_status()
+{
+  cpid=$(getPid)
+  if [ "x" != "x$cpid" ] ; then
+      return 0
+  else
+      return 1
+  fi
+}
+
+start()
+{
+    quiet_status
+    if [ $? -ne 0 ] ; then
+    echo "Starting BAK-APP application..."
+    else
+    touch /tmp/bak-app_service.heartbeat
+       return 0
+    fi
+
+    cd $BAK-APP_HOME
+    if [ $USER == "$BAK-APP_USER" ] ; then
+	$BAK-APP_EXECUTABLE >> /dev/null 2>&1 &
+    else
+	su alx -p -s /bin/bash -c "umask g+w;nohup ${BAK-APP_EXECUTABLE} >> /dev/null 2>&1 &"
+    fi
+    cpid=$(getPid)
+    if [ "x" != "x$cpid" ] ; then
+        add_monitoring
+        echo "Started. "
+    else
+        echo "Start failed. Review log files at $BAK-APP_HOME/logs."
+    fi
+    return 0
+}
+
+install()
+{
+   ln -s $scriptFile $rcFileName || return 1
+   ln -s $scriptFile $etcInitDFile || return 1 
+   insserv $BAK-APP_HOME/al_service || return 1
+   echo $serviceName installed.
+   return 0
+}
+
+uninstall()
+{
+   insserv -r $serviceNameLo || return 1
+   rm -f $rcFileName
+   rm -f $etcInitDFile
+   echo $serviceName uninstalled.
+   return 0
+}
+
+if [ $# -ne 1 ]; then
+         echo 1>&2 Usage: $0 "start|stop|restart|status"
+         exit 1
+fi
+
+RETVAL=1
+
+case $1 in
+
+	install)
+		# install
+		RETVAL=$?
+		;;
+	uninstall)
+		# uninstall
+		RETVAL=$?
+		;;
+	start)
+		start
+		RETVAL=$?
+		;;
+	stop)
+		stop
+		RETVAL=$?
+		;;
+	status)
+		status
+		RETVAL=$?
+		;;
+	restart)
+		restart
+		RETVAL=$?
+		;;
+	*)     echo $"Usage: $0 start|stop|restart|status"
+	       exit 1
+		;;
+
+esac
+
+exit $RETVAL
