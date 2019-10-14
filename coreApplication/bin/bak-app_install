@@ -3,88 +3,45 @@
 # This script will install the BAK-APP Application
 #-------------------------------------------------------------------------------
 
-BAK-APP_RPM_NAME=
-ALX_RPM_MD5SUM=3664b7bd3853efe1d53100d43ce63b53
-
-JRE_NAME=jre-8u121-linux-x64.tar.gz
-JRE_MD5SUM=093e22e4f0a55420780a0e437ab9fcd4
-
-check_linux_version()
-{
-    echo -e "\n1. Checking for Red Hat Enterprise Linux Server release 6.7 (Santiago)"
-    linuxver=`cat /etc/redhat-release` 
-    if [ ".$linuxver." == ".Red Hat Enterprise Linux Server release 6.7 (Santiago)." ] ; then
-        echo "   Confirmed Red Hat Enterprise Linux Server release 6.7 (Santiago)"
-    else
-        echo "   Found only $linuxver."
-        continue_process
-    fi
-}
-
-check_checksum()
-{
-    pkgname="$1"
-    expcmd5="$2"
-    calcmd5=`md5sum $pkgname | awk '{print $1}'`
-    if [ ".$calcmd5." = ".$expcmd5." ] ; then
-        echo "   Confirmed checksum of $pkgname"
-    else
-        echo "   Checksum verification failed on $pkgname"
-        exit 1
-    fi
-}
-
-verify_checksum_packages()
-{
-    echo -e "\n5. Verifying the checksum of the installation packages"
-    check_checksum "/var/tmp/setup/$JRE_NAME"		"$JRE_MD5SUM"
-    check_checksum "/var/tmp/setup/$BAK-APP_RPM_NAME"	"$ALX_RPM_MD5SUM"
-}
-
-
-check_and_create_bak-app_user()
-{
-    echo -e "\n7. Checking and creating user account bak-app"
-    bak-appfound=`cat /etc/passwd | grep "^bak-app" | cut -f1 -d ":"`
-    if [ ".$bak-appfound." = ".bak-app." ] ; then
-        echo -e "   Confirmed user name '$bak-appfound' found.\n"
-        return 0
-    fi
-    rm -rf /home/bak-app
-    useradd -m -d /home/bak-app -s /bin/bash bak-app
-    passwd bak-app
-}
+JRE_NAME=jre-8u201-linux-x64.tar.gz
 
 check_and_install_java()
 {
-    echo -e "\n8. Check and install JRE installation package."
+    echo -e "\n1. Check and install JRE installation package."
+    
+    #create required directories
+    mkdir -p /opt/bak-app
+    mkdir -p /opt/bak-app/lib
+    mkdir -p /opt/bak-app/lib/logs
+    
     check_java_version
     javainst=$?
     if [ ".$javainst." = ".1." ] ; then
         mkdir -p /usr/lib/jvm/
         cd /usr/lib/jvm/
-        tar -zxvf /var/tmp/setup/jre-8u121-linux-x64.tar.gz
+        tar -zxvf /var/tmp/setup/jre-8u201-linux-x64.tar.gz
     else
-        echo "   Required java version 1.8.0_121 already installed"
+        echo "   Required java version 1.8.0_201 already installed"
     fi
 }
 
 check_java_version()
 {
-    echo "    Checking for java version 1.8.0_121"
-    JAVA_HOME=/usr/lib/jvm/jre1.8.0_121
+    echo "    Checking for java version 1.8.0_201"
+    JAVA_HOME=/usr/lib/jvm/jre1.8.0_201
+
     export JAVA_HOME
     PATH=$JAVA_HOME/bin:$PATH
     export PATH
     javaver=`java -version 2>&1 | grep  "java version" | awk '{print $3}'|cut -f2 -d '"'`
-    if [ ".$javaver." == ".1.8.0_121." ] ; then
+    if [ ".$javaver." == ".1.8.0_201." ] ; then
         echo -e "    Confirmed java version $javaver\n"
         return 0
     else
         if [ ".$javaver." == ".." ] ; then
-            echo "    Could not find any java installed. Need to install JRE 1.8.0_121"
+            echo "    Could not find any java installed. Need to install JRE 1.8.0_201"
         else
-            echo "    Found only $javaver. Need to install JRE 1.8.0_121"
+            echo "    Found only $javaver. Need to install JRE 1.8.0_201"
         fi
         continue_process
         return 1
@@ -107,14 +64,10 @@ main()
 {
     echo -e "\nThis script will install or upgrade the BAK-APP application\n"
     continue_process
-    check_linux_version
-    verify_checksum_packages
-    check_and_create_bak-app_user
     check_and_install_java
     echo -e "\nInstallation/Upgrade of the BAK-APP application is fully completed.\n"
 }
 
 main
 exit 0
-
-
+    

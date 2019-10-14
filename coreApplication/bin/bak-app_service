@@ -3,9 +3,9 @@
 # Provides:          bak-app_service
 # Description:       To provide start interfaces for the BAK-APP
 ### END INIT INFO
- 
-JAVA_HOME=/usr/lib/jvm/jre1.8.0_121
-BAK-APP_HOME=/opt/bak-app
+
+JAVA_HOME=/usr/lib/jvm/jre1.8.0_201
+BAK-APP_HOME=/opt/bak-app/
 PROGRAM="org.backery.mainapp.MainApp"
 BAK-APP_EXECUTABLE="$JAVA_HOME/bin/java -cp $BAK-APP_HOME/lib/*:. $PROGRAM &"
 
@@ -13,9 +13,9 @@ start()
 {
     echo "Starting BAK-APP application..."
     cd $BAK-APP_HOME
-	$BAK-APP_EXECUTABLE >> /dev/null 2>&1 &
+        $BAK-APP_EXECUTABLE >> /dev/null 2>&1 &
     else
-	su bak-app -p -s /bin/bash -c "umask g+w;nohup ${BAK-APP_EXECUTABLE} >> /dev/null 2>&1 &"
+        su bak-app -p -s /bin/bash -c "umask g+w;nohup ${BAK-APP_EXECUTABLE} >> /dev/null 2>&1 &"
     cpid=$(ps -ef | grep org.backery.mainapp.MainApp | grep -v grep| awk  '{print $2}'|head -1)
     if [ "x" != "x$cpid" ] ; then
         echo "Started. "

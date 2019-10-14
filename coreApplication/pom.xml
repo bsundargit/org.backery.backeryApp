@@ -16,7 +16,6 @@
 			<artifactId>log4j</artifactId>
 			<version>1.2.17</version>
 		</dependency>
-
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -40,8 +39,6 @@
 			<version>1.6.2</version>
 			<scope>test</scope>
 		</dependency>
-
-
 	</dependencies>
 	<!-- <build>
 		<plugins>
@@ -78,10 +75,9 @@
 						</goals>
 						<configuration>
 							<needarch>noarch</needarch>
-							<targetOS>windows</targetOS>
-							<version>${rpmVersion}</version>
+							<targetOS>Linux</targetOS>
 							<group>BakeryApplication</group>
-							<copyright>Bhaskar</copyright>
+							<copyright>TDD</copyright>
 							<defaultDirmode>755</defaultDirmode>
 							<defaultFilemode>444</defaultFilemode>
 							<defaultGroupname>bakapp</defaultGroupname>

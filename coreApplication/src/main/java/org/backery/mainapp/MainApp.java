@@ -113,7 +113,8 @@ public class MainApp {
 				BackeryLogger.log(Level.INFO, "Launching Command Line Mode");
 				receivedList = ds.getAllData();
 				String output = new BackeryUtils().processInput(receivedList, args[0], Integer.parseInt(args[1]), data);
-				BackeryLogger.log(Level.INFO, "Packing Information " + output);
+				BackeryLogger.log(Level.INFO, "Packing Information (Box Capacity * Quantity) " + output);
+				BackeryLogger.log(Level.INFO, "Closing the application ");
 			}
 		} catch (BackeryException e) {
 			BackeryLogger.log(Level.ERROR, "Unable to initialize Bakery Application " + e.getMessage());
