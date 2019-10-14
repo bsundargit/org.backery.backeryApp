@@ -15,7 +15,12 @@ import java.util.Set;
 
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.JButton;
 
 import org.apache.log4j.Level;
 import org.backery.common.BackeryException;
@@ -46,51 +51,52 @@ public class MainApp {
 
 	static DataSourceService ds = new DataImplementation();
 
-	private static javax.swing.JPanel addItemPanel;
-	private static javax.swing.JTextArea inventoryTextArea;
-	private static javax.swing.JLabel itemCode;
-	private static javax.swing.JLabel itemCodeLabelAI;
-	private static javax.swing.JTextField itemCodeTextBoxAI;
-	private static javax.swing.JLabel itemName;
-	private static javax.swing.JLabel itemNameLabelAI;
-	private static javax.swing.JTextField itemNameTextBoxAI;
-	private static javax.swing.JLabel itemNameValue;
-	private static javax.swing.JComboBox<String> itemsComboBox;
-	private static javax.swing.JButton addButton;
-	private static javax.swing.JLabel jLabel1;
-	private static javax.swing.JLabel jLabel10;
-	private static javax.swing.JLabel jLabel11;
-	private static javax.swing.JLabel jLabel13;
-	private static javax.swing.JLabel jLabel14;
-	private static javax.swing.JLabel jLabel15;
-	private static javax.swing.JLabel jLabel16;
-	private static javax.swing.JLabel jLabel17;
-	private static javax.swing.JLabel jLabel18;
-	private static javax.swing.JLabel jLabel2;
-	private static javax.swing.JLabel jLabel6;
+	private static JPanel addItemPanel;
+	private static JTextArea inventoryTextArea;
+	private static JLabel itemCode;
+	private static JLabel itemCodeLabelAI;
+	private static JTextField itemCodeTextBoxAI;
+	private static JLabel itemName;
+	private static JLabel exampleFormat;
+	private static JLabel itemNameLabelAI;
+	private static JTextField itemNameTextBoxAI;
+	private static JLabel itemNameValue;
+	private static JComboBox<String> itemsComboBox;
+	private static JButton addButton;
+	private static JLabel jLabel1;
+	private static JLabel jLabel10;
+	private static JLabel jLabel11;
+	private static JLabel jLabel13;
+	private static JLabel jLabel14;
+	private static JLabel jLabel15;
+	private static JLabel jLabel16;
+	private static JLabel jLabel17;
+	private static JLabel jLabel18;
+	private static JLabel jLabel2;
+	private static JLabel jLabel6;
 	private static javax.swing.JMenu jMenu1;
-	private static javax.swing.JMenu jMenu2;
 	private static javax.swing.JMenuBar jMenuBar1;
-	private static javax.swing.JPanel jPanel1;
-	private static javax.swing.JPanel jPanel2;
+	private static javax.swing.JMenuItem exitMenu;
+	private static JPanel mainPanel;
+	private static JPanel jPanel2;
 	private static javax.swing.JScrollPane jScrollPane1;
 	private static javax.swing.JScrollPane jScrollPane2;
-	private static javax.swing.JTextField packQuantityTextBox;
-	private static javax.swing.JTextField packAmountTextBox;
-	private static javax.swing.JTextField jTextField5;
-	private static javax.swing.JTextField jTextField6;
-	private static javax.swing.JTextField jTextField7;
-	private static javax.swing.JTextField jTextField8;
-	private static javax.swing.JButton orderButton;
-	private static javax.swing.JPanel orderPanel;
-	private static javax.swing.JTextArea outputTrextArea;
-	private static javax.swing.JPanel packsPanel;
-	private static javax.swing.JButton processButton;
-	private static javax.swing.JComboBox<String> quantityComboBox;
-	private static javax.swing.JLabel quantityLabel;
-	private static javax.swing.JLabel remarksLabel;
-	private static javax.swing.JButton viewInventoryButton;
-	private static javax.swing.JPanel viewInventoryPanel;
+	private static JTextField packQuantityTextBox;
+	private static JTextField packAmountTextBox;
+	private static JTextField jTextField5;
+	private static JTextField jTextField6;
+	private static JTextField jTextField7;
+	private static JTextField jTextField8;
+	private static JButton orderButton;
+	private static JPanel orderPanel;
+	private static JTextArea outputTextArea;
+	private static JPanel packsPanel;
+	private static JButton processButton;
+	private static JComboBox<String> quantityComboBox;
+	private static JLabel quantityLabel;
+	private static JLabel outputLabel;
+	private static JButton viewInventoryButton;
+	private static JPanel viewInventoryPanel;
 	private static javax.swing.JTabbedPane viewItemsTab;
 
 	static Map<String, String> loadItemName = new HashMap();
@@ -133,67 +139,78 @@ public class MainApp {
 		loadItemName = new BackeryUtils().getItemName(data);
 		JFrame mainFrame = new JFrame();
 
-		jPanel1 = new javax.swing.JPanel();
-		jLabel1 = new javax.swing.JLabel();
-		jLabel2 = new javax.swing.JLabel();
-		jLabel6 = new javax.swing.JLabel();
-		jLabel17 = new javax.swing.JLabel();
-		jLabel18 = new javax.swing.JLabel();
-		jPanel2 = new javax.swing.JPanel();
+		mainPanel = new JPanel();
+		jLabel1 = new JLabel();
+		jLabel2 = new JLabel();
+		jLabel6 = new JLabel();
+		jLabel17 = new JLabel();
+		jLabel18 = new JLabel();
+		jPanel2 = new JPanel();
 		viewItemsTab = new javax.swing.JTabbedPane();
-		orderPanel = new javax.swing.JPanel();
-		itemName = new javax.swing.JLabel();
-		itemsComboBox = new javax.swing.JComboBox();
-		itemCode = new javax.swing.JLabel();
-		itemNameValue = new javax.swing.JLabel();
-		quantityLabel = new javax.swing.JLabel();
-		quantityComboBox = new javax.swing.JComboBox();
-		processButton = new javax.swing.JButton();
-		remarksLabel = new javax.swing.JLabel();
+		orderPanel = new JPanel();
+		itemName = new JLabel();
+		itemsComboBox = new JComboBox();
+		itemCode = new JLabel();
+		itemNameValue = new JLabel();
+		quantityLabel = new JLabel();
+		exampleFormat = new JLabel();
+		quantityComboBox = new JComboBox();
+		processButton = new JButton();
+		outputLabel = new JLabel();
 		jScrollPane1 = new javax.swing.JScrollPane();
-		outputTrextArea = new javax.swing.JTextArea();
-		orderButton = new javax.swing.JButton();
-		addItemPanel = new javax.swing.JPanel();
-		itemNameLabelAI = new javax.swing.JLabel();
-		itemNameTextBoxAI = new javax.swing.JTextField();
-		itemCodeLabelAI = new javax.swing.JLabel();
-		itemCodeTextBoxAI = new javax.swing.JTextField();
-		packsPanel = new javax.swing.JPanel();
-		jLabel10 = new javax.swing.JLabel();
-		packQuantityTextBox = new javax.swing.JTextField();
-		jLabel11 = new javax.swing.JLabel();
-		packAmountTextBox = new javax.swing.JTextField();
-		jLabel13 = new javax.swing.JLabel();
-		jLabel14 = new javax.swing.JLabel();
-		jLabel15 = new javax.swing.JLabel();
-		jLabel16 = new javax.swing.JLabel();
-		jTextField5 = new javax.swing.JTextField();
-		jTextField6 = new javax.swing.JTextField();
-		jTextField7 = new javax.swing.JTextField();
-		jTextField8 = new javax.swing.JTextField();
-		addButton = new javax.swing.JButton();
-		viewInventoryPanel = new javax.swing.JPanel();
-		viewInventoryButton = new javax.swing.JButton();
+		outputTextArea = new JTextArea();
+		orderButton = new JButton();
+		addItemPanel = new JPanel();
+		itemNameLabelAI = new JLabel();
+		itemNameTextBoxAI = new JTextField();
+		itemCodeLabelAI = new JLabel();
+		itemCodeTextBoxAI = new JTextField();
+		packsPanel = new JPanel();
+		jLabel10 = new JLabel();
+		packQuantityTextBox = new JTextField();
+		jLabel11 = new JLabel();
+		packAmountTextBox = new JTextField();
+		jLabel13 = new JLabel();
+		jLabel14 = new JLabel();
+		jLabel15 = new JLabel();
+		jLabel16 = new JLabel();
+		jTextField5 = new JTextField();
+		jTextField6 = new JTextField();
+		jTextField7 = new JTextField();
+		jTextField8 = new JTextField();
+		addButton = new JButton();
+		viewInventoryPanel = new JPanel();
+		viewInventoryButton = new JButton();
 		jScrollPane2 = new javax.swing.JScrollPane();
-		inventoryTextArea = new javax.swing.JTextArea();
+		inventoryTextArea = new JTextArea();
 		jMenuBar1 = new javax.swing.JMenuBar();
 		jMenu1 = new javax.swing.JMenu();
-		jMenu2 = new javax.swing.JMenu();
+		exitMenu = new javax.swing.JMenuItem();
 
 		mainFrame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 		mainFrame.setTitle("Backery - Application");
 		mainFrame.setResizable(false);
 
-		jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Operation"));
+		mainPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Operation"));
 
 		jLabel1.setText("Backery logo");
 		jLabel2.setText("Username");
 		jLabel6.setText("Last Login Time");
 		jLabel17.setText("Tom"); 
 		jLabel18.setText("09.30 06-10-2019");
+		
+		
+		exitMenu.setText("Exit");
+		exitMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                System.exit(0);
+            }
+        });
+        jMenu1.add(exitMenu);
+		
 
-		javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-		jPanel1.setLayout(jPanel1Layout);
+		javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(mainPanel);
+		mainPanel.setLayout(jPanel1Layout);
 		jPanel1Layout
 				.setHorizontalGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 						.addGroup(jPanel1Layout.createSequentialGroup()
@@ -220,7 +237,7 @@ public class MainApp {
 						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(jLabel18)
 						.addGap(0, 309, Short.MAX_VALUE)));
 
-		mainFrame.getContentPane().add(jPanel1, java.awt.BorderLayout.LINE_START);
+		mainFrame.getContentPane().add(mainPanel, java.awt.BorderLayout.LINE_START);
 
 		jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Details"));
 		jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.LINE_AXIS));
@@ -263,7 +280,7 @@ public class MainApp {
 		quantityLabel.setBounds(40, 120, 60, 20);
 
 		quantityComboBox.setModel(new javax.swing.DefaultComboBoxModel(
-				new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
+				new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10","11","12","13","14" }));
 		orderPanel.add(quantityComboBox);
 		quantityComboBox.setBounds(150, 116, 180, 26);
 
@@ -283,24 +300,29 @@ public class MainApp {
 						BackeryLogger.log(Level.DEBUG,
 								"Selected Quantity for the Item - " + quantityComboBox.getSelectedItem().toString());
 
-						outputTrextArea.setText(output);
+						outputTextArea.setText(output);
 					}
 				} catch (BackeryException e) {
 					BackeryLogger.log(Level.ERROR, "Unable to find the pack match " + e.getMessage());
 				}
 			}
 		});
+		
+		exampleFormat.setText("Pack Size * No of Packs ");
+		exampleFormat.setBounds(150, 190, 145, 29);
+		orderPanel.add(exampleFormat);
+		
 		orderPanel.add(processButton);
-		processButton.setBounds(150, 170, 85, 29);
+		processButton.setBounds(150, 160, 85, 29);
 
-		remarksLabel.setText("Remarks");
-		orderPanel.add(remarksLabel);
-		remarksLabel.setBounds(40, 230, 61, 20);
+		outputLabel.setText("Pack & Cost");
+		orderPanel.add(outputLabel);
+		outputLabel.setBounds(40, 230, 71, 20);
 
-		outputTrextArea.setColumns(20);
-		outputTrextArea.setFont(new java.awt.Font("Monospaced", 0, 18)); // NOI18N
-		outputTrextArea.setRows(5);
-		jScrollPane1.setViewportView(outputTrextArea);
+		outputTextArea.setColumns(20);
+		outputTextArea.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 18)); // NOI18N
+		outputTextArea.setRows(5);
+		jScrollPane1.setViewportView(outputTextArea);
 
 		orderPanel.add(jScrollPane1);
 		jScrollPane1.setBounds(150, 220, 390, 200);
@@ -540,10 +562,8 @@ public class MainApp {
 		mainFrame.getContentPane().add(jPanel2, java.awt.BorderLayout.CENTER);
 
 		jMenu1.setText("File");
+		jMenu1.add(exitMenu);
 		jMenuBar1.add(jMenu1);
-
-		jMenu2.setText("Edit");
-		jMenuBar1.add(jMenu2);
 
 		mainFrame.setJMenuBar(jMenuBar1);
 

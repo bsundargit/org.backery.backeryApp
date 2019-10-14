@@ -30,9 +30,13 @@ public class TestBackeryUtils {
 	@Mock
 	IBackeryUtils utils;
 
+	Map<String, Item> daoData = new LinkedHashMap();
+	Item item;
+
 	@Before
 	public void setup() {
 		utils = new BackeryUtils();
+		item = new Item();
 	}
 
 	@Test
@@ -77,9 +81,8 @@ public class TestBackeryUtils {
 	}
 
 	@Test
-	public void testPackageProcessingLogicAndExpectPackageData() {
-		Map<String, Item> daoData = new LinkedHashMap();
-		Item item = new Item();
+	public void testPackageProcessingLogicForVegemiteScroll() {
+
 		try {
 			item.setItemCode("VS5");
 			item.setItemName("Vegemite Scroll");
@@ -97,15 +100,90 @@ public class TestBackeryUtils {
 			listPack.add(p2);
 
 			item.setPacks(listPack);
-			daoData.put("Vegemite Scroll", item);
+			daoData.put(item.getItemCode(), item);
 
 			Map<Integer, Integer> dataMap = new HashMap();
 
-			String output = utils.processInput(daoData, "Vegemite Scroll", 13, dataMap);
+			String processedOutput = utils.processInput(daoData, "VS5", 10, dataMap);
+			String expectedOutput = "5 * 2\r\n" + "\r\n" + "Total Amount $17.98";
 
-			String expectedOutput = "5 * 2\r\n" + "3 * 1\r\n" + "\r\n" + "Total Amount $24.97";
+			assertEquals(expectedOutput, processedOutput);
 
-			assertEquals(expectedOutput, output);
+		} catch (BackeryException e) {
+			BackeryLogger.log(Level.ERROR, "Unable to execute test logic");
+		}
+	}
+
+	@Test
+	public void testPackageProcessingLogicForBlueBerryMuffin() {
+
+		try {
+			item.setItemCode("MB11");
+			item.setItemName("Blueberry Muffin");
+
+			List<Pack> listPack = new ArrayList();
+			Pack p1 = new Pack();
+			p1.setNumberOfItemsPerPack(2);
+			p1.setPackAmount(9.95f);
+
+			Pack p2 = new Pack();
+			p2.setNumberOfItemsPerPack(5);
+			p2.setPackAmount(16.95f);
+
+			Pack p3 = new Pack();
+			p3.setNumberOfItemsPerPack(8);
+			p3.setPackAmount(24.95f);
+
+			listPack.add(p1);
+			listPack.add(p2);
+
+			item.setPacks(listPack);
+			daoData.put(item.getItemCode(), item);
+
+			Map<Integer, Integer> dataMap = new HashMap();
+
+			String processedOutput = utils.processInput(daoData, "MB11", 14, dataMap);
+			String expectedOutput = "5 * 2\r\n" + "2 * 2\r\n" + "\r\n" + "Total Amount $53.80";
+
+			assertEquals(expectedOutput, processedOutput);
+
+		} catch (BackeryException e) {
+			BackeryLogger.log(Level.ERROR, "Unable to execute test logic");
+		}
+	}
+
+	@Test
+	public void testPackageProcessingLogicForCrossiant() {
+
+		try {
+			item.setItemCode("CF");
+			item.setItemName("Croissant");
+
+			List<Pack> listPack = new ArrayList();
+			Pack p1 = new Pack();
+			p1.setNumberOfItemsPerPack(3);
+			p1.setPackAmount(5.95f);
+
+			Pack p2 = new Pack();
+			p2.setNumberOfItemsPerPack(5);
+			p2.setPackAmount(9.95f);
+
+			Pack p3 = new Pack();
+			p3.setNumberOfItemsPerPack(9);
+			p3.setPackAmount(16.99f);
+
+			listPack.add(p1);
+			listPack.add(p2);
+
+			item.setPacks(listPack);
+			daoData.put(item.getItemCode(), item);
+
+			Map<Integer, Integer> dataMap = new HashMap();
+
+			String processedOutput = utils.processInput(daoData, "CF", 13, dataMap);
+			String expectedOutput = "5 * 2\r\n" + "3 * 1\r\n" + "\r\n" + "Total Amount $25.85";
+
+			assertEquals(expectedOutput, processedOutput);
 
 		} catch (BackeryException e) {
 			BackeryLogger.log(Level.ERROR, "Unable to execute test logic");
@@ -134,11 +212,11 @@ public class TestBackeryUtils {
 			listPack.add(p2);
 
 			item.setPacks(listPack);
-			daoData.put("Vegemite Scroll", item);
+			daoData.put("VS5", item);
 
 			Map<Integer, Integer> dataMap = new HashMap();
 
-			String output = utils.processInput(daoData, "Vegemite Scroll", 2, dataMap);
+			String output = utils.processInput(daoData, "VS5", 2, dataMap);
 
 			String expectedOutput = "No matching Combinations for the item selected.";
 
@@ -147,6 +225,5 @@ public class TestBackeryUtils {
 		} catch (BackeryException e) {
 			BackeryLogger.log(Level.ERROR, "Unable to execute test logic");
 		}
-
 	}
 }

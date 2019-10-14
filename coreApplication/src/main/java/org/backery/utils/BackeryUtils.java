@@ -1,5 +1,6 @@
 package org.backery.utils;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -47,13 +48,14 @@ public class BackeryUtils implements IBackeryUtils {
 	 * @param input
 	 * @param data
 	 */
-	public String processInput(Map<String, Item> receivedList, String inputItem, int input, Map<Integer, Integer> data) {
+	public String processInput(Map<String, Item> receivedList, String inputItem, int input,
+			Map<Integer, Integer> data) {
 
 		BackeryLogger.log(Level.INFO, "Finding the packaging structure for the selected itemcode " + inputItem
 				+ " with the quantity " + input);
 		List<Float> eachPackPrice = new ArrayList();
 		List<Integer> entryItems = new LinkedList<Integer>();
-		StringBuilder strBuilder = new StringBuilder();
+		StringBuilder outputData = new StringBuilder();
 		float totalAmount = 0.0f;
 
 		if (receivedList.containsKey(inputItem)) {
@@ -73,6 +75,7 @@ public class BackeryUtils implements IBackeryUtils {
 			Collections.reverse(entryItems);
 
 			int calculated = 0;
+			// core logic starts
 			for (int i = 0; i <= entryItems.size() - 1; i++) {
 				if (input >= entryItems.get(i)) { // Now divide input by each array item
 					int divideQuotient = input / entryItems.get(i);
@@ -85,8 +88,8 @@ public class BackeryUtils implements IBackeryUtils {
 
 					// Scenario -- where first item gets matched.
 					if (entryItems.get(i) * divideQuotient == input) {
-						strBuilder.append(entryItems.get(i) + " * " + divideQuotient);
-						strBuilder.append(System.lineSeparator());
+						outputData.append(entryItems.get(i) + " * " + divideQuotient);
+						outputData.append(System.lineSeparator());
 						BackeryLogger.log(Level.DEBUG, entryItems.get(i) + " * " + divideQuotient);
 						break;
 					}
@@ -97,34 +100,31 @@ public class BackeryUtils implements IBackeryUtils {
 							continue;
 						} else {
 							BackeryLogger.log(Level.DEBUG, entryItems.get(i) + " * " + divideQuotient);
-							strBuilder.append(entryItems.get(i) + " * " + divideQuotient);
-							strBuilder.append(System.lineSeparator());
+							outputData.append(entryItems.get(i) + " * " + divideQuotient);
+							outputData.append(System.lineSeparator());
 							calculated = entryItems.get(i) * divideQuotient;
 							input = input - calculated;
 						}
 					} else {
 						if (divideReminder == 0) {
 							BackeryLogger.log(Level.DEBUG, entryItems.get(i) + " * " + divideQuotient);
-							strBuilder.append(entryItems.get(i) + " * " + divideQuotient);
-							strBuilder.append(System.lineSeparator());
+							outputData.append(entryItems.get(i) + " * " + divideQuotient);
+							outputData.append(System.lineSeparator());
 						}
 					}
 				}
 			}
 
+			// core logic ends
+
 			for (Map.Entry<Integer, Integer> map : data.entrySet()) {
-				strBuilder.append(map.getValue() + " packs of " + map.getKey() + " quanties and cost is "
+				outputData.append(map.getValue() + " packs of " + map.getKey() + " quanties and cost is "
 						+ (ratePerPack.get(map.getKey()) * map.getValue()));
-				strBuilder.append(System.lineSeparator());
+				outputData.append(System.lineSeparator());
 				eachPackPrice.add((ratePerPack.get(map.getKey()) * map.getValue()));
 			}
 
-			float finalPrice = 0;
-			for (Float f : eachPackPrice) {
-				finalPrice = finalPrice + f;
-			}
-
-			String[] splitStrBuilder = strBuilder.toString().split(System.lineSeparator());
+			String[] splitStrBuilder = outputData.toString().split(System.lineSeparator());
 
 			// To load the rate for each packs, which is used later to find the multiple of
 			// packs
@@ -140,25 +140,24 @@ public class BackeryUtils implements IBackeryUtils {
 				}
 			}
 
-			if (strBuilder.toString().isEmpty()) {
-				strBuilder.append("No matching Combinations for the item selected.");
+			if (outputData.toString().isEmpty()) {
+				outputData.append("No matching Combinations for the item selected.");
 			} else {
-
-				strBuilder.append(System.lineSeparator());
-				strBuilder.append("Total Amount " + "$" + totalAmount);
+				DecimalFormat df = new DecimalFormat("0.00");
+				outputData.append(System.lineSeparator());
+				outputData.append("Total Amount : " + "$" + df.format(totalAmount));
 			}
-			// outputTrextArea.setText(strBuilder.toString());
 			BackeryLogger.log(Level.INFO, "The Packaging structure for the selected itemcode " + inputItem
 					+ " with the quantity " + input + " is processed successfully");
 		} else {
-			BackeryLogger.log(Level.INFO, "The Selected item is not available in the inventory");
+			BackeryLogger.log(Level.INFO, "The Selected itemcode is not available in the inventory");
 		}
 
-		return strBuilder.toString();
+		return outputData.toString();
 	}
 
 	/**
-	 * This method finds whether there exist the next item in the array of not.
+	 * This method finds whether there exist the next item (packaging size) in the array of not.
 	 * 
 	 * @param entryItems
 	 * @param size
