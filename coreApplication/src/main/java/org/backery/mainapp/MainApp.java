@@ -34,10 +34,10 @@ import org.backery.utils.WriteDataFromGuiToPropertiesFile;
 
 /**
  * Main Class for the Application.
- *  
+ * 
  * This class contains the code for UI components made out of swing. Also the
  * action/events which are associated with the components.
- *  
+ * 
  * 
  * @author esxxbhs
  *
@@ -83,10 +83,10 @@ public class MainApp {
 	private static javax.swing.JScrollPane jScrollPane2;
 	private static JTextField packQuantityTextBox;
 	private static JTextField packAmountTextBox;
-	private static JTextField jTextField5;
-	private static JTextField jTextField6;
-	private static JTextField jTextField7;
-	private static JTextField jTextField8;
+	private static JTextField packQuantity2TextBox;
+	private static JTextField packAmount2TextBox;
+	private static JTextField packQuantity3TextBox;
+	private static JTextField packAmount3TextBox;
 	private static JButton orderButton;
 	private static JPanel orderPanel;
 	private static JTextArea outputTextArea;
@@ -174,10 +174,10 @@ public class MainApp {
 		jLabel14 = new JLabel();
 		jLabel15 = new JLabel();
 		jLabel16 = new JLabel();
-		jTextField5 = new JTextField();
-		jTextField6 = new JTextField();
-		jTextField7 = new JTextField();
-		jTextField8 = new JTextField();
+		packQuantity2TextBox = new JTextField();
+		packAmount2TextBox = new JTextField();
+		packQuantity3TextBox = new JTextField();
+		packAmount3TextBox = new JTextField();
 		addButton = new JButton();
 		viewInventoryPanel = new JPanel();
 		viewInventoryButton = new JButton();
@@ -196,18 +196,16 @@ public class MainApp {
 		jLabel1.setText("Backery logo");
 		jLabel2.setText("Username");
 		jLabel6.setText("Last Login Time");
-		jLabel17.setText("Tom"); 
+		jLabel17.setText("Tom");
 		jLabel18.setText("09.30 06-10-2019");
-		
-		
+
 		exitMenu.setText("Exit");
 		exitMenu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                System.exit(0);
-            }
-        });
-        jMenu1.add(exitMenu);
-		
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				System.exit(0);
+			}
+		});
+		jMenu1.add(exitMenu);
 
 		javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(mainPanel);
 		mainPanel.setLayout(jPanel1Layout);
@@ -280,7 +278,7 @@ public class MainApp {
 		quantityLabel.setBounds(40, 120, 60, 20);
 
 		quantityComboBox.setModel(new javax.swing.DefaultComboBoxModel(
-				new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10","11","12","13","14" }));
+				new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14" }));
 		orderPanel.add(quantityComboBox);
 		quantityComboBox.setBounds(150, 116, 180, 26);
 
@@ -293,7 +291,8 @@ public class MainApp {
 						JOptionPane.showMessageDialog(itemNameValue, "Itemname is empty, Select any Itemcode");
 					} else {
 						receivedList = ds.getAllData();
-						output = new BackeryUtils().processInput(receivedList, itemsComboBox.getSelectedItem().toString(),
+						output = new BackeryUtils().processInput(receivedList,
+								itemsComboBox.getSelectedItem().toString(),
 								Integer.parseInt(quantityComboBox.getSelectedItem().toString()), MainApp.data);
 						BackeryLogger.log(Level.DEBUG,
 								"Selected Item Code - " + itemsComboBox.getSelectedItem().toString());
@@ -307,11 +306,11 @@ public class MainApp {
 				}
 			}
 		});
-		
+
 		exampleFormat.setText("Pack Size * No of Packs ");
 		exampleFormat.setBounds(150, 190, 145, 29);
 		orderPanel.add(exampleFormat);
-		
+
 		orderPanel.add(processButton);
 		processButton.setBounds(150, 160, 85, 29);
 
@@ -368,9 +367,9 @@ public class MainApp {
 												.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
 												.addComponent(packQuantityTextBox, javax.swing.GroupLayout.DEFAULT_SIZE,
 														101, Short.MAX_VALUE)
-												.addComponent(packAmountTextBox).addComponent(jTextField5)
-												.addComponent(jTextField6).addComponent(jTextField7)
-												.addComponent(jTextField8))))
+												.addComponent(packAmountTextBox).addComponent(packQuantity2TextBox)
+												.addComponent(packAmount2TextBox).addComponent(packQuantity3TextBox)
+												.addComponent(packAmount3TextBox))))
 								.addContainerGap(63, Short.MAX_VALUE)));
 		packsPanelLayout.setVerticalGroup(packsPanelLayout
 				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -387,21 +386,21 @@ public class MainApp {
 						.addGap(24, 24, 24)
 						.addGroup(packsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
 								.addComponent(jLabel13)
-								.addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE,
+								.addComponent(packQuantity2TextBox, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
 						.addGap(18, 18, 18)
 						.addGroup(packsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 								.addComponent(jLabel14)
-								.addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE,
+								.addComponent(packAmount2TextBox, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
 						.addGap(22, 22, 22)
 						.addGroup(packsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-								.addComponent(jLabel15).addComponent(jTextField7,
+								.addComponent(jLabel15).addComponent(packQuantity3TextBox,
 										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
 										javax.swing.GroupLayout.PREFERRED_SIZE))
 						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
 						.addGroup(packsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-								.addComponent(jLabel16).addComponent(jTextField8,
+								.addComponent(jLabel16).addComponent(packAmount3TextBox,
 										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
 										javax.swing.GroupLayout.PREFERRED_SIZE))
 						.addContainerGap(33, Short.MAX_VALUE)));
@@ -417,13 +416,28 @@ public class MainApp {
 				String packSize1Quantity = packQuantityTextBox.getText();
 				String packSize1Cost = packAmountTextBox.getText();
 
-				if (itemCode.isEmpty() || itemName.isEmpty() || packSize1Quantity.isEmpty()
-						|| packSize1Cost.isEmpty()) {
-					JOptionPane.showMessageDialog(addButton, "ItemCode, ItemName and one set of pack is mandatory",
+				String packSize2Quantity = packQuantity2TextBox.getText();
+				String packSize2Cost = packAmount2TextBox.getText();
+
+				String packSize3Quantity = packQuantity3TextBox.getText();
+				String packSize3Cost = packAmount3TextBox.getText();
+
+				List<String> quantityList = new ArrayList();
+				List<String> costList = new ArrayList();
+
+				quantityList.add(packSize1Quantity);
+				quantityList.add(packSize2Quantity);
+
+				costList.add(packSize1Cost);
+				costList.add(packSize2Cost);
+
+				if (itemCode.isEmpty() || itemName.isEmpty() || packSize1Quantity.isEmpty() || packSize1Cost.isEmpty()
+						|| packSize2Quantity.isEmpty() || packSize2Cost.isEmpty()) {
+					JOptionPane.showMessageDialog(addButton, "ItemCode, ItemName and two set of pack is mandatory",
 							"Insufficient Details", JOptionPane.INFORMATION_MESSAGE);
 				}
 
-				else if (checkSizeAndCostOfPack(packSize1Quantity, packSize1Cost)) {
+				else if (checkSizeAndCostOfPack(quantityList, costList)) {
 					dataToAddInPropertiesFile.append("itemcode=" + itemCode);
 					dataToAddInPropertiesFile.append(System.lineSeparator());
 					dataToAddInPropertiesFile.append("itemname=" + itemName);
@@ -432,6 +446,19 @@ public class MainApp {
 					// convert amount to float and write it to file.
 					dataToAddInPropertiesFile.append(
 							"pack=" + packSize1Quantity + "-" + String.valueOf(Float.parseFloat(packSize1Cost)));
+					dataToAddInPropertiesFile.append(",");
+					dataToAddInPropertiesFile
+							.append(packSize2Quantity + "-" + String.valueOf(Float.parseFloat(packSize2Cost)));
+
+					//Third item is optional, hence it is added only when they are not empty.
+					if (!(packSize3Quantity.isEmpty() || packSize3Cost.isEmpty())) {
+						if (checkSizeAndCostOfPack(packSize3Quantity, packSize3Cost)) {
+							dataToAddInPropertiesFile.append(",");
+							dataToAddInPropertiesFile
+									.append(packSize3Quantity + "-" + String.valueOf(Float.parseFloat(packSize3Cost)));
+						}
+					}
+
 					WriteDataFromGuiToPropertiesFile obj = new WriteDataFromGuiToPropertiesFile(
 							dataToAddInPropertiesFile);
 					obj.writeDataToPropertiesFile();
@@ -439,12 +466,35 @@ public class MainApp {
 				} else {
 					JOptionPane.showMessageDialog(addButton, "Either Quantity or Price of the Quantity in Invalid");
 				}
-				
+
 				itemCodeTextBoxAI.setText("");
 				itemNameTextBoxAI.setText("");
 				packQuantityTextBox.setText("");
 				packAmountTextBox.setText("");
+				packQuantity2TextBox.setText("");
+				packAmount2TextBox.setText("");
+				packQuantity3TextBox.setText("");
+				packAmount3TextBox.setText("");
 
+			}
+
+			private boolean checkSizeAndCostOfPack(List<String> quantityList, List<String> costList) {
+
+				try {
+					for (String str : quantityList) {
+						Integer.parseInt(str);
+					}
+
+					for (String str : costList) {
+						Float.parseFloat(str);
+					}
+					return true;
+				} catch (NumberFormatException e) {
+					BackeryLogger.log(Level.ERROR, "Quantity should be of Integer and Price should be of Float");
+					BackeryLogger.log(Level.ERROR, "Either Quantity or cost of the Item is invalid");
+				}
+
+				return false;
 			}
 
 			/**
@@ -568,12 +618,6 @@ public class MainApp {
 		mainFrame.setJMenuBar(jMenuBar1);
 
 		mainFrame.pack();
-
-		// For now, lets limit to only one set of pack to be added at a time.
-		jTextField5.setEditable(false);
-		jTextField6.setEditable(false);
-		jTextField7.setEditable(false);
-		jTextField8.setEditable(false);
 
 		// Center the GUI in the Screen.
 		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();

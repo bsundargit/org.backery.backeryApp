@@ -105,7 +105,9 @@ public class TestBackeryUtils {
 			Map<Integer, Integer> dataMap = new HashMap();
 
 			String processedOutput = utils.processInput(daoData, "VS5", 10, dataMap);
-			String expectedOutput = "5 * 2\r\n" + "\r\n" + "Total Amount $17.98";
+			String expectedOutput = "5 * 2\r\n" + 
+					"\r\n" + 
+					"Total Amount : $17.98";
 
 			assertEquals(expectedOutput, processedOutput);
 
@@ -143,7 +145,10 @@ public class TestBackeryUtils {
 			Map<Integer, Integer> dataMap = new HashMap();
 
 			String processedOutput = utils.processInput(daoData, "MB11", 14, dataMap);
-			String expectedOutput = "5 * 2\r\n" + "2 * 2\r\n" + "\r\n" + "Total Amount $53.80";
+			String expectedOutput = "5 * 2\r\n" + 
+					"2 * 2\r\n" + 
+					"\r\n" + 
+					"Total Amount : $53.80";
 
 			assertEquals(expectedOutput, processedOutput);
 
@@ -181,7 +186,10 @@ public class TestBackeryUtils {
 			Map<Integer, Integer> dataMap = new HashMap();
 
 			String processedOutput = utils.processInput(daoData, "CF", 13, dataMap);
-			String expectedOutput = "5 * 2\r\n" + "3 * 1\r\n" + "\r\n" + "Total Amount $25.85";
+			String expectedOutput = "5 * 2\r\n" + 
+					"3 * 1\r\n" + 
+					"\r\n" + 
+					"Total Amount : $25.85";
 
 			assertEquals(expectedOutput, processedOutput);
 
