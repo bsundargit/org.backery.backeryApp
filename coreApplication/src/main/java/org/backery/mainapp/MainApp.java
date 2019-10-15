@@ -8,9 +8,11 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 
 import javax.swing.JComboBox;
@@ -112,12 +114,20 @@ public class MainApp {
 			} else {
 				BackeryLogger.log(Level.INFO, "Launching Command Line Mode");
 				receivedList = ds.getAllData();
-				String output = new BackeryUtils().processInput(receivedList, args[0], Integer.parseInt(args[1]), data);
+				Scanner scanner = new Scanner(System.in);
+				System.out.println("Enter the ItemCode : ");
+				String itemCode = scanner.next();
+				System.out.println("Enter the Required No of Quantities : ");
+				int itemQuantity = scanner.nextInt();
+				String output = new BackeryUtils().processInput(receivedList, itemCode, itemQuantity, data);
+				System.out.println("Packing Information (Box Capacity * Quantity) is  " + output);
 				BackeryLogger.log(Level.INFO, "Packing Information (Box Capacity * Quantity) " + output);
 				BackeryLogger.log(Level.INFO, "Closing the application ");
 			}
 		} catch (BackeryException e) {
 			BackeryLogger.log(Level.ERROR, "Unable to initialize Bakery Application " + e.getMessage());
+		} catch (InputMismatchException e) {
+			System.out.println(" Input mismatch, ItemCode Should be type STRING and Item Quantity Should be of type INTEGER");
 		}
 	}
 
@@ -451,7 +461,7 @@ public class MainApp {
 					dataToAddInPropertiesFile
 							.append(packSize2Quantity + "-" + String.valueOf(Float.parseFloat(packSize2Cost)));
 
-					//Third item is optional, hence it is added only when they are not empty.
+					// Third item is optional, hence it is added only when they are not empty.
 					if (!(packSize3Quantity.isEmpty() || packSize3Cost.isEmpty())) {
 						if (checkSizeAndCostOfPack(packSize3Quantity, packSize3Cost)) {
 							dataToAddInPropertiesFile.append(",");
